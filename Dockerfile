@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim AS builder
 
-ENV NODE_ENV=development \
+ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
