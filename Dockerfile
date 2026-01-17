@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim AS builder
 
-ENV NODE_ENV=production \
+ENV NODE_ENV=development \
     NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
@@ -23,6 +23,7 @@ RUN corepack enable \
 COPY . .
 
 # Build Next.js + internal packages for production usage
+RUN yarn install --frozen-lockfile
 RUN yarn build
 
 FROM node:22-bookworm-slim AS runner
