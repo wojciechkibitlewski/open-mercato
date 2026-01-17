@@ -1,29 +1,24 @@
 FROM node:22-bookworm-slim AS builder
 
-ENV NODE_ENV=production \
-    NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
 
-# Install system deps required by optional native modules
 RUN apt-get update \
  && apt-get install -y --no-install-recommends python3 build-essential ca-certificates openssl \
  && rm -rf /var/lib/apt/lists/*
 
-# Install JS dependencies using Corepack/Yarn with caching
 COPY package.json yarn.lock ./
 COPY packages ./packages
 COPY tsconfig.json ./
 COPY next.config.ts ./next.config.ts
 COPY components.json ./components.json
+
 RUN corepack enable \
  && yarn install --frozen-lockfile --production=false
 
-# Copy the rest of the workspace
 COPY . .
 
-# Build Next.js + internal packages for production usage
-RUN yarn install --frozen-lockfile
 RUN yarn build
 
 FROM node:22-bookworm-slim AS runner
