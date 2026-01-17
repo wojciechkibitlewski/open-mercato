@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim AS builder
+FROM node:22-bookworm-slim AS builder
 
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
@@ -25,7 +25,7 @@ COPY . .
 # Build Next.js + internal packages for production usage
 RUN yarn build
 
-FROM node:20-bookworm-slim AS runner
+FROM node:22-bookworm-slim AS runner
 
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
